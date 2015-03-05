@@ -1,0 +1,41 @@
+repositories {
+    mavenCentral()
+}
+
+apply plugin: 'scala'
+
+task wrapper(type: Wrapper) {
+    gradleVersion = '2.2.1'
+}
+
+sourceSets {
+    // Uses default paths
+    // src/main/{java|scala}
+}
+
+dependencies {
+    compile 'org.scala-lang:scala-library:2.11.6'
+
+    testCompile 'org.scalatest:scalatest_2.11:2.2.4'
+    testCompile 'junit:junit:4.10'
+
+}
+
+compileScala {
+    //scalaCompileOptions.useCompileDaemon = true
+    // optionally specify host and port of the daemon:
+    //scalaCompileOptions.daemonServer = "localhost:4243"
+}
+
+tasks.withType(ScalaCompile) {
+    configure(scalaCompileOptions.forkOptions) {
+        memoryMaximumSize = '1g'
+        jvmArgs = ['-XX:MaxPermSize=512m']
+    }
+}
+
+tasks.withType(ScalaCompile) {
+    scalaCompileOptions.useAnt = false
+}
+
+
